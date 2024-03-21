@@ -14,20 +14,37 @@ type StudentManager struct {
 	Students []Student
 }
 
-func (sm StudentManager) AddStudent(s Student) {
+func (sm *StudentManager) AddStudent(s Student) {
 	// Implement the logic to add a student to the list.
+	sm.Students = append(sm.Students, s) 
 }
 
 func (sm StudentManager) DisplayStudents() {
 	// Implement the logic to display all students and their details.
+	for i := 0; i < len(sm.Students); i++ {
+		fmt.Println(sm.Students[i].Name)
+		fmt.Println(sm.Students[i].Age)
+		fmt.Println(sm.Students[i].GPA)
+	}
 }
 
-func (sm StudentManager) UpdateStudent(name string, updatedStudent Student) {
+func (sm *StudentManager) UpdateStudent(name string, updatedStudent Student) {
 	// Implement the logic to update a student's details by name.
+	for i := 0; i < len(sm.Students); i++ {
+		if sm.Students[i].Name == name {
+			sm.Students[i] = updatedStudent
+		}
+	}
 }
 
-func (sm StudentManager) DeleteStudent(name string) {
+func (sm *StudentManager) DeleteStudent(name string) {
 	// Implement the logic to delete a student by name.
+	for i := 0; i < len(sm.Students); i++ {
+		if sm.Students[i].Name == name {
+			sm.Students[i] = sm.Students[len(sm.Students) - 1]
+			sm.Students = sm.Students[:len(sm.Students) - 1]
+		}
+	}
 }
 
 func main() {
