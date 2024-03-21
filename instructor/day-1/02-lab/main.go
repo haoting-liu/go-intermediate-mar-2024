@@ -6,27 +6,6 @@ import "fmt"
 TODO: Find abstractions and compose interfaces to fix the commented code
 */
 
-type Account interface {
-	Deposit(float32)
-}
-type Withdrawable interface {
-	Withdraw(float32)
-}
-type Statement interface {
-	Withdraw(float32)
-}
-
-type AccountWithdrawableStatement interface {
-	Account
-	Withdrawable
-	Statement
-}
-
-// type FixedAccountStatement interface {
-// 	Account
-// 	Statement
-// }
-
 // A current account can be used to deposit and withdraw
 type CurrentAccount struct {
 	AccountNumber int
@@ -94,15 +73,15 @@ func main() {
 	_ = fd      // TODO: remove line, this is only to get rid of compilation error (unused variables)
 	_ = current
 
-	// manageAccount(savings) //TODO: fix this
-	// manageAccount(current) //TODO: fix this
+	// manageSavingsAccount(savings) //TODO: fix this
+	// manageSavingsAccount(current) //TODO: fix this
 
 	// manageFixedDepositAccount(fd) //TODO: fix this
 }
 
 /*
 // TODO: should be able to deposit, withdraw and print statements
-func manageAccount(as ?) {
+func manageSavingsAccount(as ?) {
 }
 
 // TODO: should be able to deposit and print statements
