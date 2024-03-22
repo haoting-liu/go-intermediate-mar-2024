@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"ex-di-interfaces/model"
 	"ex-di-interfaces/repository"
 	"ex-di-interfaces/service"
 	"log"
@@ -11,11 +12,17 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type ProductRouter struct {
-	service service.DefaultProductService
+type ProductService interface {
+	GetAllProducts() []model.Product
+	GetProductById(id int) *model.Product
+	AddProduct(name string, category model.Category, price float32) *model.Product
 }
 
-func NewProductRouter(ps service.DefaultProductService) ProductRouter {
+type ProductRouter struct {
+	service ProductService
+}
+
+func NewProductRouter(ps ProductService) ProductRouter {
 	return ProductRouter{ps}
 }
 
@@ -42,6 +49,7 @@ func (pr ProductRouter) newProductsHandler(w http.ResponseWriter, r *http.Reques
 
 func (pr ProductRouter) productsHandler(w http.ResponseWriter, r *http.Request) {
 	products := pr.service.GetAllProducts()
+
 	w.Header().Add("Content-Type", "application/json")
 
 	if err := json.NewEncoder(w).Encode(products); err != nil {
