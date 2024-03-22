@@ -1,0 +1,7 @@
+HTTP
+  - Built-in support from Go
+
+Service can be done using
+  - Standard HTTP (multiplexer) Encoding/Decoding JSON (standard lib)
+  - Routing libraries (ideomatic Go) + Encoding/Decoding JSON (standard lib)
+  - Frameworks

@@ -3,10 +3,10 @@ package model
 import "fmt"
 
 type Product struct {
-	Id       int
-	Name     string
-	Category Category
-	Price    float32
+	Id       int      `json:"id"`
+	Name     string   `json:"name"`
+	Category Category `json:"category"`
+	Price    float32  `json:"price"`
 }
 
 func (p Product) String() string {

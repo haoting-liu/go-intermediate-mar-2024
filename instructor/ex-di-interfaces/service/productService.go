@@ -2,22 +2,34 @@ package service
 
 import (
 	"ex-di-interfaces/model"
-	"ex-di-interfaces/repository"
 )
 
-func GetAllProducts() []model.Product {
-	repo := repository.NewInMemoryProductRepo()
-	return repo.FindAll()
+type ProductRepository interface {
+	FindBy(id int) *model.Product
+	FindAll() []model.Product
+	Save(newProduct model.Product) *model.Product
 }
 
-func GetProductById(id int) *model.Product {
-	repo := repository.NewInMemoryProductRepo()
-	return repo.FindBy(id)
+type DefaultProductService struct {
+	Repo ProductRepository
 }
 
-func AddProduct(name string, category model.Category, price float32) *model.Product {
-	repo := repository.NewInMemoryProductRepo()
+func (ps DefaultProductService) GetAllProducts() []model.Product {
+	return ps.Repo.FindAll()
+}
+
+func (ps DefaultProductService) GetProductById(id int) *model.Product {
+	return ps.Repo.FindBy(id)
+}
+
+func (ps DefaultProductService) AddProduct(name string, category model.Category, price float32) *model.Product {
 	newProduct := model.Product{Name: name, Category: category, Price: price}
 
-	return repo.Save(newProduct)
+	return ps.Repo.Save(newProduct)
+}
+
+func NewProductService(repo ProductRepository) DefaultProductService {
+	return DefaultProductService{
+		Repo: repo,
+	}
 }

@@ -1,31 +1,102 @@
 package service
 
 import (
+	mocks "ex-di-interfaces/mocks/service"
 	"ex-di-interfaces/model"
-	"reflect"
 	"testing"
 )
 
-func TestAddProduct(t *testing.T) {
-	newProduct := AddProduct("new test product", model.TOYS, 100.23)
+// type MockProductRepository struct {
+// }
 
-	if newProduct.Name != "new test product" {
-		t.Errorf("Not the same product ")
-	}
+// func (m MockProductRepository) FindBy(id int) *model.Product {
+// 	return nil
+// }
+// func (m MockProductRepository) FindAll() []model.Product {
+// 	return []model.Product{{1, "name", model.BEVERAGE, 100.02}}
+// }
+// func (m MockProductRepository) Save(newProduct model.Product) *model.Product {
+// 	return nil
+// }
 
-	if len(GetAllProducts()) != 6 {
-		t.Errorf("Expected product list should have 6 products")
-	}
+// STATE based tests
+// Interaction based test
+
+func Test_Get_all_products(t *testing.T) {
+	// What do we want to test? I want to test the interaction
+	// when calling service.GetAllProducts() a call to repo.FindAll() is made
+	// think in terms of responsibility
+
+	// ARRANGE
+	mockRepo := mocks.NewProductRepository(t)
+	ps := NewProductService(mockRepo)
+
+	// ACT & ASSERT I am also setting it as an expected that a call to FindAll function will be made
+	mockRepo.On("FindAll").Return([]model.Product{{1, "name", model.BEVERAGE, 100.02}})
+
+	//ACT
+	ps.GetAllProducts()
 }
+
+func Test_add_products(t *testing.T) {
+	// What do we want to test? I want to test the interaction
+	// when calling service.AddProduct() a call to repo.Save(Product) is made
+
+	// ARRANGE
+	mockRepo := mocks.NewProductRepository(t)
+	ps := NewProductService(mockRepo)
+
+	// ACT & ASSERT I am also setting it as an expected that a call to FindAll function will be made
+	newProduct := model.NewProduct(0, "test product", model.BOOKS, 123.45)
+
+	mockRepo.On("Save", newProduct).Return(&newProduct)
+
+	//ACT
+	ps.AddProduct("test product", model.BOOKS, 123.45)
+}
+
+func Test_addition_functionality(t *testing.T) {
+	// what do I want to test?
+	// AAA -> Arrange, Act, Assert
+
+	// ARRANGE
+	expected := 300
+
+	// ACT
+	actual := add(100, 200)
+	// ASSERT
+	if actual != expected {
+		t.Fail()
+	}
+
+}
+
+// Function under test
+func add(x, y int) int {
+	return x + y
+}
+
+/*
+	func TestAddProduct(t *testing.T) {
+		newProduct := AddProduct("new test product", model.TOYS, 100.23)
+
+		if newProduct.Name != "new test product" {
+			t.Errorf("Not the same product ")
+		}
+
+		if len(GetAllProducts()) != 6 {
+			t.Errorf("Expected product list should have 6 products")
+		}
+	}
 
 func TestGetAllProducts(t *testing.T) {
 
-	if got := GetAllProducts(); got != nil {
-		if len(got) != 5 {
-			t.Errorf("Expected products list should have 5 products")
+		if got := GetAllProducts(); got != nil {
+			if len(got) != 5 {
+				t.Errorf("Expected products list should have 5 products")
+			}
 		}
 	}
-}
 
 func TestGetProductById(t *testing.T) {
 	tests := []struct {
@@ -52,3 +123,4 @@ func TestGetProductById(t *testing.T) {
 		})
 	}
 }
+*/
